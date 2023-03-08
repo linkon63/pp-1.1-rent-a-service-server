@@ -18,44 +18,7 @@ con.connect(function (err) {
     console.log("Connected my sql!");
 });
 
-// create db
-app.get("/createDB", (req, res) => {
-    try {
-        const sql = 'CREATE DATABASE rentacar';
-        con.query(sql, (err, result) => {
-            if (err) {
-                console.log("error", err)
-                throw err
-            }
-            console.log("database created")
-            res.send("database created in admin");
-        })
-    } catch (error) {
-        console.log("error try catch", error)
-    }
-})
-
-// user login/register db
-app.get("/registerUserTable", (req, res) => {
-    try {
-        const sql = `CREATE TABLE users 
-                        ( userId int NOT NULL AUTO_INCREMENT, 
-                           name VARCHAR(255), 
-                           address VARCHAR(255),
-                           phone VARCHAR(255),
-                           details VARCHAR(255),
-                           PRIMARY KEY (userId)
-                           )`;
-        con.query(sql, (err, result) => {
-            if (err) throw err
-            console.log("table created")
-            res.send("table created")
-        })
-    } catch (error) {
-        console.log("error try catch", error)
-    }
-})
-
+// register user
 app.post("/addRegisterUser", (req, res) => {
     try {
         const { email, password, name, address, phone, details } = req.body
@@ -99,7 +62,7 @@ app.post("/addRegisterUser", (req, res) => {
         res.send(false)
     }
 })
-
+// user login
 app.post("/userLogin", (req, res) => {
     try {
         const { email, password } = req.body
@@ -116,6 +79,10 @@ app.post("/userLogin", (req, res) => {
         res.send(false)
     }
 })
+
+
+
+
 
 // delete table
 app.get("/deleteTable", (req, res) => {
@@ -135,6 +102,27 @@ app.get("/cratedTable", (req, res) => {
         console.log("table created")
         res.send("table created")
     })
+})
+
+// user login/register db
+app.get("/registerUserTable", (req, res) => {
+    try {
+        const sql = `CREATE TABLE users 
+                        ( userId int NOT NULL AUTO_INCREMENT, 
+                           name VARCHAR(255), 
+                           address VARCHAR(255),
+                           phone VARCHAR(255),
+                           details VARCHAR(255),
+                           PRIMARY KEY (userId)
+                           )`;
+        con.query(sql, (err, result) => {
+            if (err) throw err
+            console.log("table created")
+            res.send("table created")
+        })
+    } catch (error) {
+        console.log("error try catch", error)
+    }
 })
 
 
