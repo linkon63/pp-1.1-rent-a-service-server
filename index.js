@@ -85,6 +85,30 @@ app.post("/userLogin", (req, res) => {
     }
 })
 
+// booking service
+app.post("/bookingService", (req, res) => {
+    try {
+        const { email, name, phone, location, hours, address, vehicleId } = req.body
+        console.log("req.body", req.body)
+
+        let sql = "INSERT INTO booking (email, name, phone, location, hours, address, vehicleId) VALUES ?";
+        let values = [
+            [email, name, phone, location, hours, address, vehicleId],
+        ];
+        con.query(sql, [values], function (err, result) {
+            if (err) throw err;
+            console.log("✅ request records inserted:", result.affectedRows);
+            return res.status(200).json({
+                message: "you are successful to booking your service",
+                code: 200
+            });
+
+        });
+    } catch (error) {
+        console.log("❌ error from addRegisterUser")
+        res.send(false)
+    }
+})
 
 
 
@@ -164,7 +188,7 @@ app.post("/create-payment-intent", async (req, res) => {
 
 
 app.get('/', (req, res) => {
-    res.send('Hello World!!')
+    res.send('Hello World!')
 })
 
 app.listen(port, () => {
