@@ -42,10 +42,7 @@ app.post("/addRegisterUser", (req, res) => {
                     code: 400
                 });
             }
-            // if (result == []) {
-            //     console.log("✅ request result found empty = [] ", result);
-            //     createUser = true
-            // }
+
             else {
                 let sql = "INSERT INTO users (email, password, name, address, phone, details) VALUES ?";
                 let values = [
@@ -56,7 +53,8 @@ app.post("/addRegisterUser", (req, res) => {
                     console.log("✅ request records inserted:", result.affectedRows);
                     return res.status(200).json({
                         message: "you are created a account",
-                        code: 200
+                        code: 200,
+                        userMail: email
                     });
 
                 });
@@ -76,9 +74,13 @@ app.post("/userLogin", (req, res) => {
         con.query(sql, function (err, result) {
             if (err) throw err;
             console.log("✅ request records found", result);
+            return res.status(200).json({
+                message: "request records found",
+                code: 200,
+                userMail: email
+            });
         });
 
-        res.send(true)
     } catch (error) {
         console.log("❌ error from userLogin")
         res.send(false)
@@ -88,12 +90,12 @@ app.post("/userLogin", (req, res) => {
 // booking service
 app.post("/bookingService", (req, res) => {
     try {
-        const { email, name, phone, location, hours, address, vehicleId } = req.body
+        const { email, name, phone, location, hours, address, vehicleId, payment_intent } = req.body
         console.log("req.body", req.body)
 
-        let sql = "INSERT INTO booking (email, name, phone, location, hours, address, vehicleId) VALUES ?";
+        let sql = "INSERT INTO booking (email, name, phone, location, hours, address, vehicleId, payment_intent) VALUES ? ";
         let values = [
-            [email, name, phone, location, hours, address, vehicleId],
+            [email, name, phone, location, hours, address, vehicleId, payment_intent],
         ];
         con.query(sql, [values], function (err, result) {
             if (err) throw err;
