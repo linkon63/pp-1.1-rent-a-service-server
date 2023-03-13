@@ -112,6 +112,18 @@ app.post("/bookingService", (req, res) => {
     }
 })
 
+// get your booking
+app.get(`/yourBooking`, (req, res) => {
+    const userEmail = req.query.email
+    console.log("req :::->: ", req.query.email)
+    const sql = `SELECT * FROM booking WHERE email = "${userEmail}";`;
+    con.query(sql, function (err, result) {
+        if (err) throw err;
+        res.send(JSON.stringify(result))
+        console.log("Get your order", result);
+    });
+})
+
 
 
 
