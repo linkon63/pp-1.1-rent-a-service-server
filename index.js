@@ -90,12 +90,12 @@ app.post("/userLogin", (req, res) => {
 // booking service
 app.post("/bookingService", (req, res) => {
     try {
-        const { email, name, phone, location, hours, address, vehicleId, payment_intent } = req.body
+        const { email, name, phone, location, hours, address, vehicleId, payment_intent, startDate, endDate } = req.body
         console.log("req.body", req.body)
 
-        let sql = "INSERT INTO booking (email, name, phone, location, hours, address, vehicleId, payment_intent) VALUES ? ";
+        let sql = "INSERT INTO booking (email, name, phone, location, hours, address, vehicleId, payment_intent, startDate, endDate) VALUES ? ";
         let values = [
-            [email, name, phone, location, hours, address, vehicleId, payment_intent],
+            [email, name, phone, location, hours, address, vehicleId, payment_intent, startDate, endDate],
         ];
         con.query(sql, [values], function (err, result) {
             if (err) throw err;
@@ -202,7 +202,7 @@ app.post("/create-payment-intent", async (req, res) => {
 
 
 app.get('/', (req, res) => {
-    res.send('Hello World!')
+    res.send('Hello World!!')
 })
 
 app.listen(port, () => {
