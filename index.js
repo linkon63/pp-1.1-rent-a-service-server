@@ -10,14 +10,14 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors());
-
+// configure the db
 var con = mysql.createConnection({
     host: "localhost",
     user: "root",
     // password: "123456",
     database: "rentacar"
 });
-
+// connection to the db
 con.connect(function (err) {
     if (err) throw err;
     console.log("Connected my sql!");
@@ -87,21 +87,65 @@ app.post("/userLogin", (req, res) => {
     }
 })
 
+
+// validation of booking
+// SELECT * FROM `booking` WHERE vehicleId = "1" AND startDate="2023-03-22";
+
+// get your service data
+app.get(`/serviceData`, (req, res) => {
+    const serviceId = req.query.id
+    console.log("req :::->: ", req.query.id)
+    console.log("serviceId ::->: ", serviceId)
+
+    // 101 = cardata
+    // 102 = busdata
+    // 103 = truckdata
+
+    let searchTable = ''
+    try {
+        if (serviceId == '101') {
+            searchTable = 'allcardata'
+        } else if (serviceId == '102') {
+            searchTable = 'allbusdata'
+        } else if (serviceId == '103') {
+            searchTable = 'alltruckdata'
+        } else {
+            res.send("Service id not found")
+        }
+
+        console.log("service found table:", searchTable)
+        //get data
+        const sql = `SELECT * FROM ${searchTable};`;
+        con.query(sql, function (err, result) {
+            if (err) throw err;
+            console.log("result", result)
+            res.send(JSON.stringify(result))
+            console.log("Get your service data", result);
+        });
+
+    } catch (error) {
+        console.log("error")
+        res.send("error in backend")
+    }
+
+
+})
+
 // booking service
 app.post("/bookingService", (req, res) => {
     try {
-        const { email, name, phone, location, hours, address, vehicleId, payment_intent, startDate, endDate } = req.body
+        const { email, name, phone, location, hours, address, vehicleId, payment_intent, startDate } = req.body
         console.log("req.body", req.body)
 
-        let sql = "INSERT INTO booking (email, name, phone, location, hours, address, vehicleId, payment_intent, startDate, endDate) VALUES ? ";
+        let sql = "INSERT INTO booking (email, name, phone, location, hours, address, vehicleId, payment_intent, startDate) VALUES ? ";
         let values = [
-            [email, name, phone, location, hours, address, vehicleId, payment_intent, startDate, endDate],
+            [email, name, phone, location, hours, address, vehicleId, payment_intent, startDate],
         ];
         con.query(sql, [values], function (err, result) {
             if (err) throw err;
             console.log("✅ request records inserted:", result.affectedRows);
             return res.status(200).json({
-                message: "you are successful to booking your service",
+                message: "you are successful to booking your service..",
                 code: 200
             });
 
@@ -145,6 +189,62 @@ app.get("/cratedTable", (req, res) => {
         console.log("table created")
         res.send("table created")
     })
+})
+// add all service table
+app.post('/addAllService', (req, res) => {
+    console.log("req", req.body)
+    const { id, name, image, description, price } = req.body
+    // const sql = `INSERT INTO allservicedata (id, name, image, describe,price)`
+    // var sql = `INSERT INTO allservicedata (id, name, image, describe, price) VALUES ('${id}','${name}','image1','${describe}','${price}')`;
+    var sql = `INSERT INTO allservicedata (id, name, image, description,price) VALUES ('${id}','${name}','${image}','${description}','${price}');`;
+    con.query(sql, function (err, result) {
+        if (err) throw err;
+        console.log("1 record inserted");
+    });
+
+    res.send("Yes I got json")
+})
+// add all buss table
+app.post('/addBusService', (req, res) => {
+    console.log("req", req.body)
+    const { id, name, image, description, price } = req.body
+    // const sql = `INSERT INTO allservicedata (id, name, image, describe,price)`
+    // var sql = `INSERT INTO allservicedata (id, name, image, describe, price) VALUES ('${id}','${name}','image1','${describe}','${price}')`;
+    var sql = `INSERT INTO allbusdata (id, name, image, description,price) VALUES ('${id}','${name}','${image}','${description}','${price}');`;
+    con.query(sql, function (err, result) {
+        if (err) throw err;
+        console.log("1 record inserted allservicedata");
+    });
+
+    res.send("Yes I got one allservicedata")
+})
+// add all car table
+app.post('/addCarService', (req, res) => {
+    console.log("req", req.body)
+    const { id, name, image, description, price } = req.body
+    // const sql = `INSERT INTO allservicedata (id, name, image, describe,price)`
+    // var sql = `INSERT INTO allservicedata (id, name, image, describe, price) VALUES ('${id}','${name}','image1','${describe}','${price}')`;
+    var sql = `INSERT INTO allcardata (id, name, image, description,price) VALUES ('${id}','${name}','${image}','${description}','${price}');`;
+    con.query(sql, function (err, result) {
+        if (err) throw err;
+        console.log("1 record inserted addCarService");
+    });
+
+    res.send("Yes I got one addCarService")
+})
+// add all truck table
+app.post('/addTruckService', (req, res) => {
+    console.log("req", req.body)
+    const { id, name, image, description, price } = req.body
+    // const sql = `INSERT INTO allservicedata (id, name, image, describe,price)`
+    // var sql = `INSERT INTO allservicedata (id, name, image, describe, price) VALUES ('${id}','${name}','image1','${describe}','${price}')`;
+    var sql = `INSERT INTO alltruckdata (id, name, image, description,price) VALUES ('${id}','${name}','${image}','${description}','${price}');`;
+    con.query(sql, function (err, result) {
+        if (err) throw err;
+        console.log("1 record inserted addTruckService..");
+    });
+
+    res.send("Yes I got one addTruckService .")
 })
 
 // user login/register db
