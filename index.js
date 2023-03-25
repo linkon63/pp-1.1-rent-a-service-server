@@ -91,6 +91,30 @@ app.post("/userLogin", (req, res) => {
 // validation of booking
 // SELECT * FROM `booking` WHERE vehicleId = "1" AND startDate="2023-03-22";
 
+app.get('/serviceAvailable', (req, res) => {
+    const { id, date } = req.query
+    console.log("service available", id, date)
+    //SELECT * FROM booking WHERE vehicleId = '201' AND startDate='2023-03-25';
+    const sql = `SELECT * FROM booking WHERE vehicleId = '${id}' AND startDate='${date}';`
+    try {
+        con.query(sql, function (err, result) {
+            if (err) throw err;
+            if (result.length > 0) {
+                console.log("result if", { status: true, message: "can not book this day", date: date })
+                res.send({ status: true, message: "can not book this day", date: date })
+            } else {
+                console.log("result else", { status: false, message: "can not book this day", date: date })
+                res.send({ status: false, message: "can not book this day", date: date })
+            }
+        });
+    } catch (error) {
+        console.log("Error", error)
+        res.send(error)
+    }
+})
+
+
+
 // get your service data
 app.get(`/serviceData`, (req, res) => {
     const serviceId = req.query.id
