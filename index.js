@@ -93,18 +93,42 @@ app.post("/userLogin", (req, res) => {
 
 app.get('/serviceAvailable', (req, res) => {
     const { id, date } = req.query
-    console.log("service available", id, date)
+    console.log("🧑‍💻 service available:", id, "➡️ ", date)
     //SELECT * FROM booking WHERE vehicleId = '201' AND startDate='2023-03-25';
     const sql = `SELECT * FROM booking WHERE vehicleId = '${id}' AND startDate='${date}';`
     try {
         con.query(sql, function (err, result) {
             if (err) throw err;
             if (result.length > 0) {
-                console.log("result if", { status: true, message: "can not book this day", date: date })
-                res.send({ status: true, message: "can not book this day", date: date })
+                console.log("result if",
+                    {
+                        status: true,
+                        message: "❌ can not book this day",
+                        date: date,
+                        vehicleId: id
+                    }
+                )
+                res.send({
+                    status: true,
+                    message: "❌ can not book this day",
+                    date: date,
+                    vehicleId: id
+                })
             } else {
-                console.log("result else", { status: false, message: "can not book this day", date: date })
-                res.send({ status: false, message: "can not book this day", date: date })
+                console.log("result else",
+                    {
+                        status: false,
+                        message: "✅ can book this day",
+                        date: date,
+                        vehicleId: id
+                    }
+                )
+                res.send({
+                    status: false,
+                    message: "✅ can book this day",
+                    date: date,
+                    vehicleId: id
+                })
             }
         });
     } catch (error) {
