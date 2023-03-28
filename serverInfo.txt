@@ -1,0 +1,11 @@
+Your account number is: 757678
+
+Your new database is now ready to use.
+
+To connect to your database use these details
+
+Server: sql10.freemysqlhosting.net
+Name: sql10609189
+Username: sql10609189
+Password: bbIZLNLBTb
+Port number: 3306

@@ -13,10 +13,10 @@ app.use(bodyParser.json());
 app.use(cors());
 // configure the db
 var con = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    // password: "123456",
-    database: "rentacar"
+    host: "sql10.freemysqlhosting.net",
+    user: "sql10609189",
+    password: "bbIZLNLBTb",
+    database: "sql10609189"
 });
 // connection to the db
 con.connect(function (err) {
