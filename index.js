@@ -221,6 +221,24 @@ app.post("/bookingService", (req, res) => {
         res.send(false)
     }
 })
+// delete booking service
+app.get('/deleteBookingService', (req, res) => {
+    const { bookingId, email } = req.query
+    console.log("bookingId :", bookingId, " - ", " email", email)
+    var sql = `DELETE FROM booking WHERE bookingId = '${bookingId}' AND email = '${email}';`
+    var sql2 = ``
+    con.query(sql, function (err, result) {
+        if (err) throw err;
+        console.log("Number of records deleted: " + result.affectedRows);
+        const sql = `SELECT * FROM booking WHERE email = "${email}";`;
+        con.query(sql, function (err, result) {
+            if (err) throw err;
+            res.send(JSON.stringify(result))
+            console.log("Get your order", result);
+        });
+    });
+
+})
 
 // get your booking
 app.get(`/yourBooking`, (req, res) => {
