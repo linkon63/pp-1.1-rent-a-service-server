@@ -93,10 +93,10 @@ app.post("/userLogin", (req, res) => {
 // SELECT * FROM `booking` WHERE vehicleId = "1" AND startDate="2023-03-22";
 
 app.get('/serviceAvailable', (req, res) => {
-    const { id, date } = req.query
+    const { id, date, email } = req.query
     console.log("🧑‍💻 service available ::", id, "➡️ ", date)
     //SELECT * FROM booking WHERE vehicleId = '201' AND startDate='2023-03-25';
-    const sql = `SELECT * FROM booking WHERE vehicleId = '${id}';`
+    const sql = `SELECT * FROM booking WHERE vehicleId = '${id}' AND email='${email}';`
     // const sql = `SELECT * FROM booking WHERE vehicleId = '${id}' AND startDate='${date}';`
     try {
         con.query(sql, function (err, result) {
