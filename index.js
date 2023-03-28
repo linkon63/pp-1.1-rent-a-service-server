@@ -5,6 +5,7 @@ const app = express()
 const port = 8080
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const { dateConvert } = require('./functions/localDateFunction');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -95,38 +96,54 @@ app.get('/serviceAvailable', (req, res) => {
     const { id, date } = req.query
     console.log("🧑‍💻 service available:", id, "➡️ ", date)
     //SELECT * FROM booking WHERE vehicleId = '201' AND startDate='2023-03-25';
-    const sql = `SELECT * FROM booking WHERE vehicleId = '${id}' AND startDate='${date}';`
+    const sql = `SELECT * FROM booking WHERE vehicleId = '${id}';`
+    // const sql = `SELECT * FROM booking WHERE vehicleId = '${id}' AND startDate='${date}';`
     try {
         con.query(sql, function (err, result) {
             if (err) throw err;
             if (result.length > 0) {
-                console.log("result if",
+                console.log('🔄️ result get:', result.length)
+
+                let dateArray = [...result]
+                let allBookedDate = []
+                // console.log('🔄️ result dateArray:', dateArray)
+                for (let i = 0; i < dateArray.length; i++) {
+                    const element = dateArray[i];
+                    // let date = dateConvert(element.startDate)
+                    console.log("el", element.startDate)
+                    allBookedDate.push(element.startDate)
+                }
+                console.log('🔄️ allBookedDate:', allBookedDate.length)
+
+                console.log("result if : ",
                     {
                         status: true,
                         message: "❌ can not book this day",
-                        date: date,
-                        vehicleId: id
+                        date: date || "",
+                        vehicleId: id,
+                        allBookedDate: allBookedDate
                     }
                 )
                 res.send({
                     status: true,
                     message: "❌ can not book this day",
-                    date: date,
-                    vehicleId: id
+                    date: date || "",
+                    vehicleId: id,
+                    allBookedDate: [...allBookedDate]
                 })
             } else {
                 console.log("result else",
                     {
                         status: false,
                         message: "✅ can book this day",
-                        date: date,
+                        date: date || "",
                         vehicleId: id
                     }
                 )
                 res.send({
                     status: false,
                     message: "✅ can book this day",
-                    date: date,
+                    date: date || "",
                     vehicleId: id
                 })
             }
