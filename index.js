@@ -94,7 +94,7 @@ app.post("/userLogin", (req, res) => {
 
 app.get('/serviceAvailable', (req, res) => {
     const { id, date } = req.query
-    console.log("🧑‍💻 service available:", id, "➡️ ", date)
+    console.log("🧑‍💻 service available ::", id, "➡️ ", date)
     //SELECT * FROM booking WHERE vehicleId = '201' AND startDate='2023-03-25';
     const sql = `SELECT * FROM booking WHERE vehicleId = '${id}';`
     // const sql = `SELECT * FROM booking WHERE vehicleId = '${id}' AND startDate='${date}';`
@@ -102,11 +102,12 @@ app.get('/serviceAvailable', (req, res) => {
         con.query(sql, function (err, result) {
             if (err) throw err;
             if (result.length > 0) {
-                console.log('🔄️ result get:', result.length)
+                console.log('🔄️ result get:', result)
 
                 let dateArray = [...result]
                 let allBookedDate = []
-                // console.log('🔄️ result dateArray:', dateArray)
+
+                console.log('🔄️ result dateArray:', dateArray)
                 for (let i = 0; i < dateArray.length; i++) {
                     const element = dateArray[i];
                     // let date = dateConvert(element.startDate)
@@ -200,7 +201,7 @@ app.get(`/serviceData`, (req, res) => {
 app.post("/bookingService", (req, res) => {
     try {
         const { email, name, phone, location, hours, address, vehicleId, payment_intent, startDate } = req.body
-        console.log("req.body", req.body)
+        console.log("req.body : ", req.body)
 
         let sql = "INSERT INTO booking (email, name, phone, location, hours, address, vehicleId, payment_intent, startDate) VALUES ? ";
         let values = [
@@ -208,7 +209,7 @@ app.post("/bookingService", (req, res) => {
         ];
         con.query(sql, [values], function (err, result) {
             if (err) throw err;
-            console.log("✅ request records inserted:", result.affectedRows);
+            console.log("✅ request records inserted : :", result.affectedRows);
             return res.status(200).json({
                 message: "you are successful to booking your service..",
                 code: 200
