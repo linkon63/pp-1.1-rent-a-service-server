@@ -1,3 +1,4 @@
+# Server
 https://www.freemysqlhosting.net/account/
 Your account number is: 757678
 
@@ -10,3 +11,8 @@ Name: sql10609189
 Username: sql10609189
 Password: bbIZLNLBTb
 Port number: 3306
+
+# Local host admin site
+    host: "localhost",
+    user: "root",
+    database: "rentacar"
